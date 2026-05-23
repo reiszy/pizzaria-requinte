@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block content %}
+<h2>Movimentações de Estoque</h2>
+<form method="post" class="row g-3 bg-white p-3 rounded shadow-sm mb-4">{{ form.hidden_tag() }}
+  <div class="col-md-4">{{ form.produto_id(class="form-select") }}</div>
+  <div class="col-md-2">{{ form.tipo_movimentacao(class="form-select") }}</div>
+  <div class="col-md-2">{{ form.quantidade(class="form-control",placeholder="Qtd") }}</div>
+  <div class="col-md-3">{{ form.observacao(class="form-control",placeholder="Observação") }}</div>
+  <div class="col-md-1"><button class="btn btn-danger w-100">+</button></div>
+</form>
+<table class="table bg-white"><thead><tr><th>Data</th><th>Produto</th><th>Tipo</th><th>Qtd</th><th>Obs</th></tr></thead><tbody>
+{% for m in movs %}<tr><td>{{ m.data.strftime('%d/%m/%Y %H:%M') }}</td><td>{{ m.produto.nome if m.produto }}</td>
+<td><span class="badge bg-{{'success' if m.tipo_movimentacao=='entrada' else 'danger'}}">{{m.tipo_movimentacao}}</span></td>
+<td>{{m.quantidade}}</td><td>{{m.observacao or ''}}</td></tr>{% endfor %}
+</tbody></table>{% endblock %}

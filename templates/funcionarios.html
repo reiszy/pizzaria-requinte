@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h2>Funcionários</h2>
+<a href="{{ url_for('funcionarios.novo') }}" class="btn btn-danger"><i class="bi bi-plus"></i> Novo</a></div>
+<div class="row g-3">
+<div class="col-md-7"><table class="table bg-white"><thead><tr><th>Nome</th><th>Cargo</th><th>Telefone</th><th>Salário</th><th></th></tr></thead><tbody>
+{% for f in funcs %}<tr><td>{{f.nome}}</td><td>{{f.cargo or ''}}</td><td>{{f.telefone or ''}}</td><td>R$ {{"%.2f"|format(f.salario)}}</td>
+<td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('funcionarios.editar',fid=f.id) }}">Editar</a></td></tr>{% endfor %}
+</tbody></table></div>
+<div class="col-md-5"><div class="card-kpi"><h6>Ranking de vendas</h6>
+<table class="table table-sm"><thead><tr><th>Funcionário</th><th>Pedidos</th><th>Total</th></tr></thead><tbody>
+{% for nome,total,qtd in ranking %}<tr><td>{{nome}}</td><td>{{qtd}}</td><td>R$ {{"%.2f"|format(total)}}</td></tr>{% endfor %}
+</tbody></table></div></div>
+</div>{% endblock %}

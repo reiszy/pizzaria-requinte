@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h2>Pedidos</h2>
+<a href="{{ url_for('pedidos.novo') }}" class="btn btn-danger"><i class="bi bi-plus"></i> Novo Pedido</a></div>
+<form class="mb-3"><select name="status" class="form-select w-auto d-inline-block" onchange="this.form.submit()">
+<option value="">Todos os status</option>
+{% for s in ['Em preparo','Finalizado','Entregue','Cancelado'] %}<option value="{{s}}" {% if status==s %}selected{% endif %}>{{s}}</option>{% endfor %}
+</select></form>
+<table class="table bg-white"><thead><tr><th>#</th><th>Data</th><th>Mesa</th><th>Funcionário</th><th>Total</th><th>Pagamento</th><th>Status</th><th></th></tr></thead><tbody>
+{% for p in pedidos.items %}<tr><td>#{{p.id}}</td><td>{{p.data.strftime('%d/%m/%Y %H:%M')}}</td>
+<td>{{p.mesa.numero if p.mesa else '-'}}</td><td>{{p.funcionario.nome if p.funcionario else '-'}}</td>
+<td>R$ {{"%.2f"|format(p.valor_total)}}</td><td>{{p.forma_pagamento or '-'}}</td>
+<td><span class="badge bg-{{ {'Em preparo':'warning','Finalizado':'info','Entregue':'success','Cancelado':'danger'}[p.status] }}">{{p.status}}</span></td>
+<td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('pedidos.detalhe',pid=p.id) }}">Abrir</a></td></tr>{% endfor %}
+</tbody></table>
+<nav><ul class="pagination">
+{% for pg in pedidos.iter_pages() %}<li class="page-item {% if pg==pedidos.page %}active{% endif %}"><a class="page-link" href="?page={{pg}}&status={{status}}">{{pg}}</a></li>{% endfor %}
+</ul></nav>{% endblock %}

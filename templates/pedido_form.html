@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block content %}
+<h2>Novo Pedido</h2>
+<form method="post" class="bg-white p-3 rounded shadow-sm">
+<input type="hidden" name="csrf_token" value=""><!-- CSRF não obrigatório aqui pois usamos form server -->
+<div class="row g-3 mb-3">
+  <div class="col-md-3"><label class="form-label">Mesa</label>
+    <select name="mesa_id" class="form-select"><option value="">Sem mesa</option>
+    {% for m in mesas %}<option value="{{m.id}}">Mesa {{m.numero}} ({{m.status}})</option>{% endfor %}</select></div>
+  <div class="col-md-3"><label class="form-label">Funcionário</label>
+    <select name="funcionario_id" class="form-select">{% for f in funcionarios %}<option value="{{f.id}}">{{f.nome}}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><label class="form-label">Pagamento</label>
+    <select name="forma_pagamento" class="form-select">
+      {% for fp in ['Dinheiro','Débito','Crédito','Pix','Vale Refeição'] %}<option>{{fp}}</option>{% endfor %}
+    </select></div>
+  <div class="col-md-3"><label class="form-label">Observações</label><input class="form-control" name="observacoes"></div>
+</div>
+<h5>Pizzas</h5>
+{% for p in pizzas %}
+<div class="row g-2 align-items-center mb-1">
+  <div class="col-md-7">{{p.nome}} - {{p.tamanho}} <span class="text-muted">R$ {{"%.2f"|format(p.valor)}}</span></div>
+  <input type="hidden" name="pizza_id" value="{{p.id}}">
+  <div class="col-md-2"><input type="number" name="pizza_qtd" value="0" min="0" class="form-control form-control-sm"></div>
+</div>
+{% endfor %}
+<h5 class="mt-3">Bebidas</h5>
+{% for b in bebidas %}
+<div class="row g-2 align-items-center mb-1">
+  <div class="col-md-7">{{b.nome}} <span class="text-muted">R$ {{"%.2f"|format(b.valor)}}</span></div>
+  <input type="hidden" name="bebida_id" value="{{b.id}}">
+  <div class="col-md-2"><input type="number" name="bebida_qtd" value="0" min="0" class="form-control form-control-sm"></div>
+</div>
+{% endfor %}
+<hr><button class="btn btn-danger btn-lg">Registrar Pedido</button>
+<a class="btn btn-link" href="{{ url_for('pedidos.listar') }}">Cancelar</a>
+</form>{% endblock %}

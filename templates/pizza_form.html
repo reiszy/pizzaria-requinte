@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% block content %}
+<h2>{{titulo}}</h2>
+<form method="post" class="bg-white p-3 rounded shadow-sm">{{ form.hidden_tag() }}
+<div class="row g-3">
+  <div class="col-md-6"><label class="form-label">Nome</label>{{ form.nome(class="form-control") }}</div>
+  <div class="col-md-3"><label class="form-label">Tamanho</label>{{ form.tamanho(class="form-select") }}</div>
+  <div class="col-md-3"><label class="form-label">Valor</label>{{ form.valor(class="form-control") }}</div>
+  <div class="col-12"><label class="form-label">Descrição</label>{{ form.descricao(class="form-control",rows=2) }}</div>
+  <div class="col-12 form-check ms-3">{{ form.ativo(class="form-check-input") }}<label class="form-check-label">Ativo</label></div>
+</div>
+<hr><h5>Ingredientes</h5>
+<div id="ingredientes">
+{% if pizza %}{% for ing in pizza.ingredientes %}
+<div class="row g-2 mb-2"><div class="col-md-6">
+<select name="ingrediente_id" class="form-select">{% for pr in produtos %}<option value="{{pr.id}}" {% if pr.id==ing.produto_id %}selected{% endif %}>{{pr.nome}} ({{pr.unidade_medida}})</option>{% endfor %}</select>
+</div><div class="col-md-3"><input type="number" step="0.01" name="ingrediente_qtd" class="form-control" value="{{ing.quantidade_utilizada}}"></div>
+<div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.row').remove()">×</button></div></div>
+{% endfor %}{% endif %}
+</div>
+<button type="button" class="btn btn-sm btn-outline-secondary" onclick="addIng()"><i class="bi bi-plus"></i> Ingrediente</button>
+<hr><button class="btn btn-danger">Salvar</button>
+<a class="btn btn-link" href="{{ url_for('cardapio.pizzas') }}">Voltar</a>
+</form>
+<template id="tplIng">
+<div class="row g-2 mb-2"><div class="col-md-6">
+<select name="ingrediente_id" class="form-select">{% for pr in produtos %}<option value="{{pr.id}}">{{pr.nome}} ({{pr.unidade_medida}})</option>{% endfor %}</select>
+</div><div class="col-md-3"><input type="number" step="0.01" name="ingrediente_qtd" class="form-control" placeholder="Qtd"></div>
+<div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.row').remove()">×</button></div></div>
+</template>
+<script>function addIng(){document.getElementById('ingredientes').appendChild(document.getElementById('tplIng').content.cloneNode(true));}</script>
+{% endblock %}

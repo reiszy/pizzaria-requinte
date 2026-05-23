@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block content %}
+<h2>Relatórios</h2>
+<form class="row g-2 mb-4 bg-white p-3 rounded shadow-sm">
+<div class="col-md-3"><label class="form-label">Início</label><input type="date" name="inicio" value="{{inicio}}" class="form-control"></div>
+<div class="col-md-3"><label class="form-label">Fim</label><input type="date" name="fim" value="{{fim}}" class="form-control"></div>
+<div class="col-md-3 align-self-end"><button class="btn btn-danger">Filtrar</button></div>
+</form>
+<div class="row g-3 mb-4">
+<div class="col-md-3"><div class="card-kpi"><div class="label">Faturamento</div><div class="value">R$ {{"%.2f"|format(faturamento)}}</div></div></div>
+<div class="col-md-3"><div class="card-kpi"><div class="label">Pedidos</div><div class="value">{{qtd_pedidos}}</div></div></div>
+<div class="col-md-3"><div class="card-kpi"><div class="label">Entradas Fin.</div><div class="value text-success">R$ {{"%.2f"|format(entradas)}}</div></div></div>
+<div class="col-md-3"><div class="card-kpi"><div class="label">Lucro</div><div class="value">R$ {{"%.2f"|format(lucro)}}</div></div></div>
+</div>
+
+<div class="row g-3">
+<div class="col-md-4"><div class="card-kpi"><h6>Top Pizzas</h6><ol class="ps-3">
+{% for n,q in top_pizzas %}<li>{{n}} <b>({{q|int}})</b></li>{% else %}<li class="text-muted">—</li>{% endfor %}</ol></div></div>
+<div class="col-md-4"><div class="card-kpi"><h6>Top Bebidas</h6><ol class="ps-3">
+{% for n,q in top_bebidas %}<li>{{n}} <b>({{q|int}})</b></li>{% else %}<li class="text-muted">—</li>{% endfor %}</ol></div></div>
+<div class="col-md-4"><div class="card-kpi"><h6>Mesas mais usadas</h6><ol class="ps-3">
+{% for n,q in top_mesas %}<li>Mesa {{n}} <b>({{q}})</b></li>{% else %}<li class="text-muted">—</li>{% endfor %}</ol></div></div>
+</div>
+
+<hr><h5>Exportações</h5>
+<div class="d-flex gap-2 flex-wrap">
+{% for t in ['pedidos','estoque','financeiro'] %}
+<a class="btn btn-outline-success" href="{{ url_for('relatorios.exportar',formato='xlsx',tipo=t) }}"><i class="bi bi-file-excel"></i> {{t}}.xlsx</a>
+<a class="btn btn-outline-secondary" href="{{ url_for('relatorios.exportar',formato='csv',tipo=t) }}"><i class="bi bi-filetype-csv"></i> {{t}}.csv</a>
+{% endfor %}
+<button class="btn btn-outline-dark" onclick="window.print()"><i class="bi bi-printer"></i> Imprimir</button>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block content %}
+<h2>Pedido #{{ pedido.id }}</h2>
+<div class="card-kpi mb-3">
+<p><b>Data:</b> {{ pedido.data.strftime('%d/%m/%Y %H:%M') }} ·
+<b>Mesa:</b> {{ pedido.mesa.numero if pedido.mesa else '-' }} ·
+<b>Funcionário:</b> {{ pedido.funcionario.nome if pedido.funcionario else '-' }} ·
+<b>Pagamento:</b> {{ pedido.forma_pagamento or '-' }}</p>
+<p><b>Status:</b> {{ pedido.status }} · <b>Total:</b> R$ {{ "%.2f"|format(pedido.valor_total) }}</p>
+{% if pedido.observacoes %}<p><b>Obs:</b> {{ pedido.observacoes }}</p>{% endif %}
+</div>
+<table class="table bg-white"><thead><tr><th>Item</th><th>Qtd</th><th>Unit.</th><th>Subtotal</th></tr></thead><tbody>
+{% for i in pedido.itens %}<tr>
+<td>{{ i.pizza.nome if i.pizza else (i.bebida.nome if i.bebida else '-') }}</td>
+<td>{{ i.quantidade }}</td><td>R$ {{"%.2f"|format(i.valor_unitario)}}</td>
+<td>R$ {{"%.2f"|format(i.valor_unitario*i.quantidade)}}</td></tr>{% endfor %}
+</tbody></table>
+<form method="post" action="{{ url_for('pedidos.alterar_status',pid=pedido.id) }}" class="d-flex gap-2">
+<select name="status" class="form-select w-auto">
+{% for s in ['Em preparo','Finalizado','Entregue','Cancelado'] %}<option {% if pedido.status==s %}selected{% endif %}>{{s}}</option>{% endfor %}
+</select><button class="btn btn-danger">Atualizar Status</button>
+<button type="button" class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer"></i> Imprimir Comanda</button>
+</form>{% endblock %}

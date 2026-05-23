@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+<div class="row g-3 mb-4">
+  <div class="col-md-3"><div class="card-kpi"><div class="label">Faturamento dia</div><div class="value">R$ {{ "%.2f"|format(fat_dia) }}</div></div></div>
+  <div class="col-md-3"><div class="card-kpi"><div class="label">Faturamento mês</div><div class="value">R$ {{ "%.2f"|format(fat_mes) }}</div></div></div>
+  <div class="col-md-3"><div class="card-kpi"><div class="label">Pedidos hoje</div><div class="value">{{ pedidos_dia }}</div></div></div>
+  <div class="col-md-3"><div class="card-kpi"><div class="label">Lucro estim. mês</div><div class="value">R$ {{ "%.2f"|format(lucro) }}</div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-md-8"><div class="card-kpi"><h6>Faturamento - últimos 14 dias</h6><canvas id="cFat" height="110"></canvas></div></div>
+  <div class="col-md-4"><div class="card-kpi"><h6>Top 5 Pizzas</h6>
+    <ul class="list-group list-group-flush">
+      {% for nome,qtd in top_pizzas %}<li class="list-group-item d-flex justify-content-between"><span>{{nome}}</span><b>{{qtd|int}}</b></li>{% else %}<li class="list-group-item text-muted">Sem dados</li>{% endfor %}
+    </ul></div></div>
+</div>
+<div class="row g-3 mt-1">
+  <div class="col-md-6"><div class="card-kpi"><h6>Mesas</h6>
+    <div class="d-flex flex-wrap gap-2">
+      {% for m in mesas %}<span class="badge-status status-{{m.status|replace(' ','-')}}">Mesa {{m.numero}} · {{m.status}}</span>{% endfor %}
+    </div></div></div>
+  <div class="col-md-6"><div class="card-kpi"><h6>Estoque baixo ({{ estoque_baixo|length }})</h6>
+    <ul class="list-group list-group-flush">
+      {% for p in estoque_baixo[:8] %}<li class="list-group-item d-flex justify-content-between"><span>{{p.nome}}</span><span class="text-danger">{{p.estoque_atual}} {{p.unidade_medida}}</span></li>
+      {% else %}<li class="list-group-item text-muted">Tudo ok</li>{% endfor %}
+    </ul></div></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+new Chart(document.getElementById('cFat'),{type:'line',
+  data:{labels:{{ labels|tojson }},datasets:[{label:'R$',data:{{ valores|tojson }},borderColor:'#c1272d',backgroundColor:'rgba(193,39,45,.15)',fill:true,tension:.3}]},
+  options:{plugins:{legend:{display:false}}}});
+</script>
+{% endblock %}

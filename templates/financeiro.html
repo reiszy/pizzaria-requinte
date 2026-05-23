@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block content %}
+<h2>Financeiro</h2>
+<div class="row g-3 mb-4">
+<div class="col-md-4"><div class="card-kpi"><div class="label">Entradas</div><div class="value text-success">R$ {{"%.2f"|format(entradas)}}</div></div></div>
+<div class="col-md-4"><div class="card-kpi"><div class="label">Despesas</div><div class="value text-danger">R$ {{"%.2f"|format(despesas)}}</div></div></div>
+<div class="col-md-4"><div class="card-kpi"><div class="label">Saldo</div><div class="value">R$ {{"%.2f"|format(saldo)}}</div></div></div>
+</div>
+<form method="post" class="row g-3 bg-white p-3 rounded shadow-sm mb-4">{{ form.hidden_tag() }}
+<div class="col-md-2">{{ form.tipo(class="form-select") }}</div>
+<div class="col-md-4">{{ form.descricao(class="form-control",placeholder="Descrição") }}</div>
+<div class="col-md-2">{{ form.valor(class="form-control",placeholder="Valor") }}</div>
+<div class="col-md-2">{{ form.categoria(class="form-control",placeholder="Categoria") }}</div>
+<div class="col-md-2"><button class="btn btn-danger w-100">Lançar</button></div>
+</form>
+<table class="table bg-white"><thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Categoria</th><th>Valor</th></tr></thead><tbody>
+{% for l in lancs.items %}<tr><td>{{l.data.strftime('%d/%m/%Y')}}</td>
+<td><span class="badge bg-{{'success' if l.tipo=='entrada' else 'danger'}}">{{l.tipo}}</span></td>
+<td>{{l.descricao}}</td><td>{{l.categoria or ''}}</td><td>R$ {{"%.2f"|format(l.valor)}}</td></tr>{% endfor %}
+</tbody></table>
+<nav><ul class="pagination">
+{% for pg in lancs.iter_pages() %}<li class="page-item {% if pg==lancs.page %}active{% endif %}"><a class="page-link" href="?page={{pg}}">{{pg}}</a></li>{% endfor %}
+</ul></nav>{% endblock %}

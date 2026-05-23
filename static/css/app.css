@@ -1,0 +1,18 @@
+:root{--bg:#f6f7fb;--card:#fff;--brand:#c1272d;--brand-dark:#8a1c20;--text:#1f2937;--muted:#6b7280;}
+body.dark{--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--muted:#94a3b8;}
+body{background:var(--bg);color:var(--text);}
+.sidebar{min-height:100vh;background:linear-gradient(180deg,var(--brand-dark),var(--brand));color:#fff;padding:1rem;}
+.sidebar a{color:#fff;display:block;padding:.55rem .75rem;border-radius:.5rem;text-decoration:none;margin-bottom:.15rem;font-size:.95rem;}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,.15);}
+.sidebar .brand{font-weight:800;letter-spacing:.5px;font-size:1.15rem;margin-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:.75rem;}
+.card-kpi{background:var(--card);border-radius:.9rem;padding:1.1rem;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-kpi .label{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:1px;}
+.card-kpi .value{font-size:1.6rem;font-weight:700;margin-top:.25rem;}
+.table thead th{background:#f1f5f9;}
+body.dark .card-kpi,body.dark .table,body.dark .form-control,body.dark .form-select{background:var(--card);color:var(--text);border-color:#334155;}
+body.dark .table thead th{background:#0f172a;color:var(--text);}
+.status-Livre{background:#16a34a;color:#fff;}
+.status-Ocupada{background:#dc2626;color:#fff;}
+.status-Reservada{background:#f59e0b;color:#fff;}
+.status-Em.limpeza,.status-Em-limpeza{background:#0ea5e9;color:#fff;}
+.badge-status{padding:.35rem .6rem;border-radius:1rem;font-size:.75rem;}

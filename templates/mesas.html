@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h2>Mesas</h2>
+<a href="{{ url_for('mesas.nova') }}" class="btn btn-danger"><i class="bi bi-plus"></i> Nova</a></div>
+<div class="row g-3">
+{% for m in mesas %}
+<div class="col-md-3"><div class="card-kpi text-center">
+<h4>Mesa {{m.numero}}</h4>
+<span class="badge-status status-{{m.status|replace(' ','-')}}">{{m.status}}</span>
+<p class="text-muted small mt-2">Capacidade: {{m.capacidade}}</p>
+<div class="btn-group btn-group-sm">
+{% for s in ['Livre','Ocupada','Reservada','Em limpeza'] %}
+<form method="post" action="{{ url_for('mesas.status',mid=m.id,status=s) }}" style="display:inline">
+<button class="btn btn-outline-secondary">{{s}}</button></form>
+{% endfor %}
+</div>
+<a href="{{ url_for('mesas.editar',mid=m.id) }}" class="btn btn-sm btn-link mt-1">Editar</a>
+</div></div>{% endfor %}
+</div>{% endblock %}

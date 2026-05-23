@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Estoque</h2>
+  <div><a href="{{ url_for('estoque.movimentar') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left-right"></i> Movimentar</a>
+  <a href="{{ url_for('estoque.novo') }}" class="btn btn-danger"><i class="bi bi-plus"></i> Novo Produto</a></div>
+</div>
+<form class="mb-3"><input class="form-control" name="q" value="{{ q }}" placeholder="Buscar produto..."></form>
+<div class="table-responsive"><table class="table table-hover bg-white">
+<thead><tr><th>Produto</th><th>Categoria</th><th>Unid.</th><th>Estoque</th><th>Mínimo</th><th>Custo</th><th></th></tr></thead><tbody>
+{% for p in produtos.items %}
+<tr {% if p.estoque_atual <= p.estoque_minimo %}class="table-warning"{% endif %}>
+  <td>{{p.nome}}</td><td>{{p.categoria or ''}}</td><td>{{p.unidade_medida}}</td>
+  <td>{{p.estoque_atual}}</td><td>{{p.estoque_minimo}}</td><td>R$ {{ "%.2f"|format(p.preco_custo) }}</td>
+  <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('estoque.editar',pid=p.id) }}"><i class="bi bi-pencil"></i></a>
+  <form method="post" action="{{ url_for('estoque.excluir',pid=p.id) }}" style="display:inline" onsubmit="return confirm('Excluir?')">
+    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form></td>
+</tr>{% endfor %}
+</tbody></table></div>
+<nav><ul class="pagination">
+{% for pg in produtos.iter_pages() %}<li class="page-item {% if pg==produtos.page %}active{% endif %}"><a class="page-link" href="?page={{pg}}&q={{q}}">{{pg}}</a></li>{% endfor %}
+</ul></nav>
+{% endblock %}
