@@ -10,7 +10,7 @@ from flask import Flask, redirect, url_for
 from flask_login import LoginManager
 from config import Config
 from models import db, Usuario, Mesa, Produto, Pizza, Bebida, Funcionario, IngredientePizza
-
+print("APP INICIANDO...")
 
 def criar_app():
     app = Flask(__name__)
@@ -131,5 +131,4 @@ def seed_initial():
 
 
 if __name__ == "__main__":
-    app = criar_app()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)
